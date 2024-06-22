@@ -1,30 +1,21 @@
 <div align="center">
-    <h1>Project Title</h1>
+    <h1>BizSync</h1>
 
 <img src='https://github.com/upes-open/Git-WorkShop/assets/101355193/b9315c8e-5aaa-438e-ab5a-48b25571dc90' width=100>
 
 </div>
 
-> Project Description
+> An ERP web-based application for MSMEs
 
 <h2>Technology Stack</h2>
 
-[![My Skills](https://skillicons.dev/icons?i=react,python,c,spring,js,nodejs,flask,django)](https://skillicons.dev)<br>
-[![My Skills](https://skillicons.dev/icons?i=mysql,mongodb)](https://skillicons.dev)<br>
-[![My Skills](https://skillicons.dev/icons?i=tensorflow,opencv)](https://skillicons.dev)<br>
-[![My Skills](https://skillicons.dev/icons?i=unity,blender)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=html,css,react,js,nodejs,express)](https://skillicons.dev)<br>
+[![My Skills](https://skillicons.dev/icons?i=mongodb)](https://skillicons.dev)<br>
 
 ## Installation
 1. Install the NodeJS LTS (v20.14.0) [Click Here](https://nodejs.org/en/download/package-manager)
 
-2. Install the latest Python version (v3.12.4) [Click Here](https://www.python.org/downloads/)
-
-3. For Python based projects:
-    ```zsh
-    pip install -r requirements.txt
-    python3 app.py
-    ```
-4. Node based projects: 
+2. Node based projects: 
     ```zsh
     cd <folder_name>
     npm i
