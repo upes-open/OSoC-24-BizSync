@@ -83,20 +83,26 @@ footer {
 }
 
 @media (max-width: 480px) {
+  footer{
+    bottom: 0;
+  }
   .footer-content .left p {
-    font-size: 16px;
+    font-size: 35px;
   }
 
   .footer-content .left ul {
-    gap: 10px;
+    gap: 30px;
+    font-size: 30px;
   }
 
   .footer-content .right {
     gap: 10px;
+    bottom: 0;
+    margin-top: 90px;
   }
 
   .footer-content .right .social-icon img {
-    width: 20px;
-    height: 20px;
+    width: 50px;
+    height: 50px;
   }
 }
