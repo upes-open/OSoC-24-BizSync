@@ -33,7 +33,7 @@ const ResetPage = () => {
 
   return (
     <div className="w-screen min-h-screen bg-[#09090b] text-white flex items-center justify-center fixed">
-      <div className="border-[#27272a] border rounded-md p-8 flex flex-col lg:w-1/3 space-y-3">
+      <div className="border-[#27272a] border rounded-md p-8 flex flex-col lg:w-[450px] space-y-3 w-full mx-4">
         <p className="font-bold text-2xl">Reset Password</p>
         <form
           onSubmit={handleSubmit(onSubmit)}
