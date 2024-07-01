@@ -1,11 +1,11 @@
 import {React} from 'react' 
-// import Contact from './contact'
+import Contact from './contact'
 
 function App() {
   return (
     <>
     
-    {/* <Contact/> */}
+    <Contact/>
     </>
   );
 }
