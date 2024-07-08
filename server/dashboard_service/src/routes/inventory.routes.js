@@ -4,7 +4,7 @@ import {
   getInventory,
   getLowStock,
   updateItem,
-} from "../controllers/inventory.controller";
+} from "../controllers/inventory.controller.js";
 
 const router = Router();
 

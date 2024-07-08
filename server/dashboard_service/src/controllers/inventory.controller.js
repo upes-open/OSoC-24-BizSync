@@ -8,7 +8,7 @@ const getInventory = asyncHandler(async (req, res) => {
 
   const inventoryItems = await InventoryItem.find({ user: userId });
 
-  res
+  return res
     .status(200)
     .json(
       new ApiResponse(200, { items: inventoryItems }, "Fetched successfully")
@@ -32,7 +32,7 @@ const addItem = asyncHandler(async (req, res) => {
   if (!item)
     throw new ApiError(500, "Something went wrong while creating item");
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, { item }, "Item created successfully"));
 });
@@ -60,7 +60,9 @@ const updateItem = asyncHandler(async (req, res) => {
     $and: [{ _id: itemId }, { user: userId }],
   });
 
-  res.status(200).json(new ApiResponse(200, { updateItem }, "Item updated"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { updateItem }, "Item updated"));
 });
 
 const getLowStock = asyncHandler(async (req, res) => {
@@ -71,7 +73,7 @@ const getLowStock = asyncHandler(async (req, res) => {
     quantity: { $lte: reorderLevel },
   });
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, { lowStockItems }, "Fetched successfully"));
 });
