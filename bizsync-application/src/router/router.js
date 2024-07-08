@@ -8,6 +8,8 @@ import SignUp from "../_auth/pages/SignUp";
 import ResetPwd from "../_auth/pages/ResetPwd";
 import Otp from "../_auth/pages/Otp";
 import ResetPage from "../_auth/pages/ResetPage";
+import DashboardLayout from "../_dashboard/DashboardLayout";
+import DashboardHome from "../_dashboard/pages/DashboardHome";
 // import ErrorPage from "../error-page";
 
 export const router = createBrowserRouter([
@@ -19,6 +21,19 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+    ],
+  },
+
+  // dashboard
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "home",
+        element: <DashboardHome />,
       },
     ],
   },
