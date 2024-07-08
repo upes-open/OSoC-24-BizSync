@@ -20,9 +20,13 @@ app.use(verifyJWT());
 import inventoryRoute from "./routes/inventory.routes.js";
 import supplierRoute from "./routes/supplier.routes.js";
 import staffRoute from "./routes/staff.routes.js";
+import financialRoute from "./routes/financial.routes.js";
+import salesRoute from "./routes/sales.routes.js";
 
 app.use("/api/v1", inventoryRoute);
 app.use("api/v1", supplierRoute);
 app.use("api/v1", staffRoute);
+app.use("api/v1", financialRoute);
+app.use("api/v1", salesRoute);
 
 export { app };
