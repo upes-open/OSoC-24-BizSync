@@ -1,14 +1,13 @@
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { Fin } from "../models/inventory.model.js";
+import { Fin } from "../models/financial.model.js";
 
 
 const finRecord = asyncHandler(async (req, res) => {
     const records = await Fin.find();
     res.status(200).json(new apiResponse(200, "Financial records retrieved successfully", records));
   });
-
 
 
 const addFinRecord = asyncHandler(async (req, res) => {

@@ -1,6 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { apiError } from "../utils/apiError.js";
-
 
 const inventorySchema = new Schema(
   {

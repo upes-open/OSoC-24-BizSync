@@ -5,15 +5,15 @@ import {
   addFinRecord,
   updateFinRecord,
   finReport
-  } from "../controllers/inventory.controller.js";
+  } from "../controllers/financial.controller.js";
 
 const router = Router();
 
-//retrieving and add to the inventory
+//retrieving and add to financials
 router.route("/financials").get(finRecord);
 router.route("/financials").post(addFinRecord);
 
-// update the inventory which is present
+// update the rec which is present
 router.route("/financials/:id").put(updateFinRecord);
 router.route("/reports").get(finReport);
 
