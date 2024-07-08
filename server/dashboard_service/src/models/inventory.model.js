@@ -21,7 +21,7 @@ const InventoryItemSchema = new Schema(
       type: String,
       trim: true,
       lowercase: true,
-      default: "good",
+      default: "active",
     },
     user: {
       type: Schema.Types.ObjectId,

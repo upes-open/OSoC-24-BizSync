@@ -25,7 +25,7 @@ const StaffSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "good",
+      default: "active",
       trim: true,
       lowercase: true,
     },
