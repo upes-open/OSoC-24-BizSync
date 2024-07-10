@@ -7,7 +7,6 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 
 import inventoryRoute from "./routes/inventory.routes.js";
 import finRoute from "./routes/financial.routes.js";
-import supplierRoute from "./routes/supplier.routes.js";
 import salesRoute from "./routes/sales.routes.js";
 
 
