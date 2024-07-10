@@ -37,7 +37,7 @@ const DashboardHome = () => {
   return (
     <div className="w-full h-screen flex flex-col bg-[#121212] text-white overflow-hidden">
       <div className="p-4 flex-grow overflow-y-auto">
-        <div className="bg-noen p-4 flex justify-end items-center gap-4">
+        <div className="bg-none p-4 flex justify-end items-center gap-4">
           <button className="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition-colors duration-200">
             Add new item
           </button>
