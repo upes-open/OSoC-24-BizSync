@@ -8,6 +8,18 @@ import SignUp from "../_auth/pages/SignUp";
 import ResetPwd from "../_auth/pages/ResetPwd";
 import Otp from "../_auth/pages/Otp";
 import ResetPage from "../_auth/pages/ResetPage";
+import DashboardLayout from "../_dashboard/DashboardLayout";
+import DashboardHome from "../_dashboard/pages/DashboardHome";
+import Receivables from "../_dashboard/pages/Receivables";
+import Spends from "../_dashboard/pages/Spends";
+import Inventory from "../_dashboard/pages/Inventory";
+import Notifications from "../_dashboard/pages/Notifications";
+import DetailedInventory from "../_dashboard/pages/DetailedInventory";
+import Supplier from "../_dashboard/pages/Supplier";
+import Staff from "../_dashboard/pages/Staff";
+import FinancialRecords from "../_dashboard/pages/FinancialRecords";
+import Reports from "../_dashboard/pages/Reports";
+import Sales from "../_dashboard/pages/Sales";
 // import ErrorPage from "../error-page";
 
 export const router = createBrowserRouter([
@@ -19,6 +31,19 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+    ],
+  },
+
+  // dashboard
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "home",
+        element: <FinancialRecords />,
       },
     ],
   },
