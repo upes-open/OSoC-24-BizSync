@@ -3,10 +3,16 @@ import { Outlet } from "react-router-dom";
 
 const dashboardItems = [
   { name: "Home", path: "home" },
-  { name: "Receivables", path: "" },
-  { name: "Spends", path: "" },
-  { name: "Inventory", path: "" },
-  { name: "Notification", path: "" },
+  { name: "Receivables", path: "receivables" },
+  { name: "Spends", path: "spends" },
+  { name: "Inventory", path: "inventory" },
+  { name: "Notification", path: "notification" },
+  { name: "Spends", path: "spends" },
+  { name: "Supplier", path: "Supplier" },
+  { name: "Staff", path: "Staff" },
+  { name: "Financial", path: "financial" },
+  { name: "Sales", path: "sales" },
+  { name: "Reports", path: "reports" },
 ];
 
 const DashboardLayout = () => {

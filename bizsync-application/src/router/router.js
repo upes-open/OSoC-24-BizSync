@@ -20,6 +20,7 @@ import Staff from "../_dashboard/pages/Staff";
 import FinancialRecords from "../_dashboard/pages/FinancialRecords";
 import Reports from "../_dashboard/pages/Reports";
 import Sales from "../_dashboard/pages/Sales";
+import Contact from "../components/Contact";
 // import ErrorPage from "../error-page";
 
 export const router = createBrowserRouter([
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
     ],
   },
 
@@ -43,7 +48,43 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "home",
+        element: <DashboardHome />,
+      },
+      {
+        path: "notifications",
+        element: <Notifications />,
+      },
+      {
+        path: "receivables",
+        element: <Receivables />,
+      },
+      {
+        path: "inventory",
+        element: <Inventory />,
+      },
+      {
+        path: "spends",
+        element: <Spends />,
+      },
+      {
+        path: "supplier",
+        element: <Supplier />,
+      },
+      {
+        path: "staff",
+        element: <Staff />,
+      },
+      {
+        path: "financial",
         element: <FinancialRecords />,
+      },
+      {
+        path: "sales",
+        element: <Sales />,
+      },
+      {
+        path: "reports",
+        element: <Reports />,
       },
     ],
   },

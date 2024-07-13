@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const Contact = () => {
   return (
     <>
@@ -37,7 +36,7 @@ const Contact = () => {
                     ></path>
                   </svg>
                   <a href="#" className="text-white text-sm ml-3 font-bold">
-                  upesopen@gmail.com
+                    upesopen@gmail.com
                   </a>
                 </li>
                 <li className="flex items-center max-lg:justify-center">
@@ -132,7 +131,7 @@ const Contact = () => {
               <form>
                 <div className="grid sm:grid-cols-2 gap-8">
                   {/* first name input */}
-               
+
                   {/* organisation input */}
                   <div class="relative flex items-center sm:col-span-2">
                     <input
