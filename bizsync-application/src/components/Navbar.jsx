@@ -6,8 +6,8 @@ const links = [
   { path: "/", name: "Features" },
   { path: "/", name: "Pricing" },
   { path: "/", name: "About Us" },
-  { path: "/", name: "Contact Us" },
-  { path: "/", name: "Sign up" },
+  { path: "/contact", name: "Contact Us" },
+  { path: "/sign-up", name: "Sign up" },
 ];
 
 const Navbar = () => {
@@ -25,7 +25,7 @@ const Navbar = () => {
               <p>{link.name}</p>
             </Link>
           ))}
-          <Link to="register">
+          <Link to="/sign-in">
             <button className="bg-white text-black w-32 py-2 px-4 rounded-md hover:bg-gray-800 hover:text-white transition ease-in-out">
               Login
             </button>
