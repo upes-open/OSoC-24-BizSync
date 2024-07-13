@@ -20,7 +20,7 @@ import Staff from "../_dashboard/pages/Staff";
 import FinancialRecords from "../_dashboard/pages/FinancialRecords";
 import Reports from "../_dashboard/pages/Reports";
 import Sales from "../_dashboard/pages/Sales";
-import Contact from "../components/Contact";
+import Contact from "../components/Contact.jsx";
 // import ErrorPage from "../error-page";
 
 export const router = createBrowserRouter([
