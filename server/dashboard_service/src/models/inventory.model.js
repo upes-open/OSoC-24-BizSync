@@ -5,30 +5,29 @@ const inventorySchema = new Schema(
     name: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
     quantity: {
       type: Number,
-      required: true
+      required: true,
     },
     reorderLevel: {
       type: Number,
-      required: true
+      required: true,
     },
-   status:{
-    type:String,
-    required:true
-   }
+    status: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-inventorySchema.methods.invalidQuantity = async function(quantity, next) {
+inventorySchema.methods.invalidQuantity = async function (quantity, next) {
   if (quantity < 0) {
     return next(new apiError("Quantity less than 0 not allowed"));
   }
   next();
 };
 
-
-export const Inventory= mongoose.model("inventory", inventorySchema);
+export const Inventory = mongoose.model("Inventory", inventorySchema);
