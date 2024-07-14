@@ -1,7 +1,7 @@
-import { Staff } from "../models/staff.model";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
+import { Staff } from "../models/staff.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getStaff = asyncHandler(async (req, res) => {
   const userId = req.user._id;

@@ -8,7 +8,7 @@ import { sendEmail } from "../utils/sendEmail.js";
 
 const UserType = z.object({
   username: z.string().min(3).toLowerCase().trim(),
-  email: z.string().toLowerCase().email().trim(),
+  email: z.string().toLowerCase().trim().email(),
   organization: z.string().toLowerCase().trim(),
   password: z
     .string()
@@ -24,6 +24,7 @@ const UserType = z.object({
 
 const registerUser = asyncHandler(async (req, res) => {
   const { username, email, organization, password } = req.body;
+  console.log(req.body);
 
   const response = await validateData(username, email, organization, password);
 
@@ -64,7 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !username)
+  if (!email || !password)
     throw new ApiError(400, "Username or password is required");
 
   const user = await User.findOne({ email });
@@ -281,13 +282,14 @@ const generateAccessAndRefreshTokens = async (userId) => {
   }
 };
 
-const validateData = async (username, organization, email, password) => {
+const validateData = async (username, email, organization, password) => {
   const result = UserType.safeParse({
     username,
     email,
     organization,
     password,
   });
+  console.log(result.error);
   if (!result.success) throw new ApiError(400, "All fields must be valid");
   return result;
 };

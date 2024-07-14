@@ -4,8 +4,8 @@ import {
   inventoryList,
   addInventory,
   updateInventory,
-  stockCheck
-  } from "../controllers/inventory.controller.js";
+  stockCheck,
+} from "../controllers/inventory.controller.js";
 
 const router = Router();
 
@@ -16,6 +16,5 @@ router.route("/inventory").post(addInventory);
 // update the inventory which is present
 router.route("/inventory/:id").put(updateInventory);
 router.route("/inventory/low").post(stockCheck);
-
 
 export default router;
