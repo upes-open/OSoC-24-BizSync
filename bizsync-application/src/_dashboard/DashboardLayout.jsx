@@ -15,9 +15,24 @@ const dashboardItems = [
   { name: "Reports", path: "reports" },
 ];
 
+
 const DashboardLayout = () => {
   const [activeItem, setActiveItem] = useState("Home");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchDashboardItems = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/dashboard-items');
+        const data = await response.json();
+        setDashboardItems(data);
+      } catch (error) {
+        console.error("Error fetching dashboard items:", error);
+      }
+    };
+  
+    fetchDashboardItems();
+  }, []);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
