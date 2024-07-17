@@ -1,91 +1,114 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RolePopup from "../../components/RolePopup";
+import { AddStaffModal } from "../../components/AddStaffModal";
+import axios from "axios";
 
 const Staff = () => {
   // ... (previous state declarations and functions)
-  const [staffData, setStaffData] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      position: "Manager",
-      email: "john.doe@example.com",
-      phone: "+1 (555) 123-4567",
-      status: "Active",
-      roles: ["Admin", "Sales"],
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      position: "Sales Representative",
-      email: "jane.smith@example.com",
-      phone: "+1 (555) 987-6543",
-      status: "On Leave",
-      roles: ["Sales"],
-    },
-    {
-      id: 3,
-      name: "Bob Johnson",
-      position: "Technician",
-      email: "bob.johnson@example.com",
-      phone: "+1 (555) 246-8135",
-      status: "Active",
-      roles: ["Support"],
-    },
-  ]);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [staffData, setStaffData] = useState([]);
 
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [newStaff, setNewStaff] = useState({
-    name: "",
-    position: "",
-    email: "",
-    phone: "",
-    status: "Active",
-    roles: [],
-  });
+  const handleAddStaff = async (newStaff) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8001/api/v1/staff",
+        {
+          name: newStaff.name,
+          contactInfo: newStaff.contactInfo,
+          position: newStaff.position,
+          roles: newStaff.roles,
+        },
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
 
-  const handleAddStaff = () => {
-    setStaffData([...staffData, { ...newStaff, id: staffData.length + 1 }]);
-    setNewStaff({
-      name: "",
-      position: "",
-      email: "",
-      phone: "",
-      status: "Active",
-      roles: [],
-    });
-    setShowAddForm(false);
+      console.log(response.data.data);
+      setStaffData([...staffData, response.data.data]);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleEditStaff = (id) => {
-    // Placeholder for edit functionality
-    console.log("Editing staff with id:", id);
-  };
+  const [selectedStaff, setSelectedStaff] = useState();
 
-  const [selectedStaff, setSelectedStaff] = useState(null);
-
-  const handleOpenRolePopup = (staff) => {
+  const handleEditStaff = (staff) => {
+    console.log(staff);
     setSelectedStaff(staff);
+    setIsEditModalOpen(true);
   };
 
-  const handleCloseRolePopup = () => {
-    setSelectedStaff(null);
+  const handleUpdateStaff = async (updatedStaff) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8001/api/v1/staff/${selectedStaff._id}`,
+        {
+          name: updatedStaff.name,
+          roles: updatedStaff.roles,
+          poition: updatedStaff.position,
+          contactInfo: updatedStaff.contactInfo,
+          status: updatedStaff.status,
+        },
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+      getStaff();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getStaff = async () => {
+    try {
+      const response = await axios.get("http://localhost:8001/api/v1/staff", {
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+        },
+      });
+
+      console.log(response.data.data);
+      setStaffData(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleSaveRoles = (staffId, newRoles) => {
-    setStaffData(
-      staffData.map((staff) =>
-        staff.id === staffId ? { ...staff, roles: newRoles } : staff
-      )
-    );
-  };
+  useEffect(() => {
+    getStaff();
+  }, []);
 
   return (
     <div className="lg:w-full w-screen bg-[#121212] text-white p-4">
       <div className="bg-none p-4 flex justify-end items-center gap-4">
-        <button className="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition-colors duration-200">
-          Add new supplier
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition-colors duration-200"
+        >
+          Add Staff
         </button>
       </div>
+      <AddStaffModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleAddStaff}
+      />
+
+      <AddStaffModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSave={handleUpdateStaff}
+        staff={selectedStaff}
+      />
       <div className="bg-black rounded-md border border-[#27272A] p-4">
         <h3 className="text-xl font-semibold mb-2">Staff List</h3>
         <div className="overflow-x-auto">
@@ -111,8 +134,12 @@ const Staff = () => {
                   <td className="py-2 pr-6 whitespace-nowrap">
                     {staff.position}
                   </td>
-                  <td className="py-2 pr-6 whitespace-nowrap">{staff.email}</td>
-                  <td className="py-2 pr-6 whitespace-nowrap">{staff.phone}</td>
+                  <td className="py-2 pr-6 whitespace-nowrap">
+                    {staff.contactInfo.email}
+                  </td>
+                  <td className="py-2 pr-6 whitespace-nowrap">
+                    {staff.contactInfo.phone}
+                  </td>
                   <td
                     className={`py-2 pr-6 whitespace-nowrap ${
                       staff.status.toLowerCase() === "active"
@@ -124,17 +151,15 @@ const Staff = () => {
                   </td>
                   <td className="py-2 pr-6">
                     <div className="">
-                      <button
-                        onClick={() => handleOpenRolePopup(staff)}
-                        className="text-blue-500 hover:text-blue-400 text-sm"
-                      >
+                      {staff.roles.map((role) => `${role} `)}
+                      {/* <button className="text-blue-500 hover:text-blue-400 text-sm">
                         Manage Roles
-                      </button>
+                      </button> */}
                     </div>
                   </td>
                   <td className="py-2 whitespace-nowrap">
                     <button
-                      onClick={() => handleEditStaff(staff.id)}
+                      onClick={() => handleEditStaff(staff)}
                       className="text-blue-500 hover:text-blue-400"
                     >
                       <svg
@@ -153,14 +178,6 @@ const Staff = () => {
           </table>
         </div>
       </div>
-
-      {selectedStaff && (
-        <RolePopup
-          staff={selectedStaff}
-          onClose={handleCloseRolePopup}
-          onSave={handleSaveRoles}
-        />
-      )}
     </div>
   );
 };

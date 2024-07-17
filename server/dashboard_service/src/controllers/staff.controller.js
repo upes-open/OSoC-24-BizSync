@@ -12,14 +12,13 @@ const getStaff = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, { staff }, "Fetched Successfully "));
+    .json(new ApiResponse(200, staff, "Fetched Successfully "));
 });
 
 const addStaff = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
   const { name, contactInfo, position, roles } = req.body;
-
   if (!name || !contactInfo || !position || !roles)
     throw new ApiError(400, "Invalid fields");
 
@@ -44,19 +43,20 @@ const addStaff = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, { savedStaff }, "Staff creadted successfully"));
+    .json(new ApiResponse(200, savedStaff, "Staff creadted successfully"));
 });
 
 const updateStaff = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const staffId = req.params.id;
 
-  const { name, roles, postion, contactInfo, status } = req.body;
+  const { name, roles, position, contactInfo, status } = req.body;
+  console.log(req.body);
 
   if (!staffId) throw new ApiError(404, "No staff id");
 
-  const staff = await Staff.findOne({ _id: staffId, user: userId });
-  if (!staff) throw new ApiError(404, "Staff not found");
+  const staffMember = await Staff.findOne({ _id: staffId, user: userId });
+  if (!staffMember) throw new ApiError(404, "Staff not found");
 
   staffMember.name = name !== undefined ? name : staffMember.name;
   staffMember.position =
@@ -69,13 +69,13 @@ const updateStaff = asyncHandler(async (req, res) => {
   await staffMember.save();
 
   const updatedStaff = await await Staff.findOne({
-    _id: staff._id,
-    user: staff.user,
+    _id: staffMember._id,
+    user: staffMember.user,
   });
 
   return res
     .status(200)
-    .json(new ApiResponse(200, { updateStaff }, "Update success"));
+    .json(new ApiResponse(200, updatedStaff, "Update success"));
 });
 
 export { getStaff, addStaff, updateStaff };
