@@ -5,29 +5,26 @@ const finSchema = new Schema(
     type: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
     amount: {
       type: Number,
-      required: true
+      required: true,
     },
     date: {
       type: Date,
-      required: true
+      required: true,
     },
-    category:{
-        type:String,
-        required:true
+    category: {
+      type: String,
+      required: true,
     },
-   status:{
-    type:String,
-    required:true
-   }
+    status: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-
-
-
-export const Fin= mongoose.model("fin", finSchema);
+export const Fin = mongoose.model("fin", finSchema);

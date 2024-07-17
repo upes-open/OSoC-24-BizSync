@@ -1,5 +1,5 @@
-import { apiError } from "../utils/ApiError.js";
-import { apiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Fin } from "../models/financial.model.js";
 
@@ -8,7 +8,7 @@ const finRecord = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(
-      new apiResponse(200, "Financial records retrieved successfully", records)
+      new ApiResponse(200, records, "Financial records retrieved successfully")
     );
 });
 
@@ -16,7 +16,7 @@ const addFinRecord = asyncHandler(async (req, res) => {
   const { type, amount, date, category, status } = req.body;
 
   if (!type || !amount || !date || !category || !status) {
-    throw new apiError(400, "All fields are required");
+    throw new ApiError(400, "All fields are required");
   }
 
   const newRecord = new Fin({ type, amount, date, category, status });
@@ -25,7 +25,7 @@ const addFinRecord = asyncHandler(async (req, res) => {
   res
     .status(201)
     .json(
-      new apiResponse(201, "Financial record added successfully", createdRecord)
+      new ApiResponse(201, createdRecord, "Financial record added successfully")
     );
 });
 
@@ -36,7 +36,7 @@ const updateFinRecord = asyncHandler(async (req, res) => {
   const record = await Fin.findById(id);
 
   if (!record) {
-    throw new apiError(404, "Financial record not found");
+    throw new ApiError(404, "Financial record not found");
   }
   record.type = type || record.type;
   record.amount = amount || record.amount;
@@ -49,7 +49,7 @@ const updateFinRecord = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(
-      new apiResponse(
+      new ApiResponse(
         200,
         "Financial record updated successfully",
         updatedRecord
@@ -58,15 +58,15 @@ const updateFinRecord = asyncHandler(async (req, res) => {
 });
 
 const finReport = asyncHandler(async (req, res) => {
-  const { date } = req.query;
+  const date = req.query.date;
   //for demo purpose only
   if (!date) {
-    throw new apiError(400, "Date query parameter is required");
+    throw new ApiError(400, "Date query parameter is required");
   }
   const records = await Fin.find({ date: new Date(date) });
   res
     .status(200)
-    .json(new apiResponse(200, "Reports generated successfully", records));
+    .json(new ApiResponse(200, records, "Reports generated successfully"));
 });
 
 export { finRecord, addFinRecord, updateFinRecord, finReport };

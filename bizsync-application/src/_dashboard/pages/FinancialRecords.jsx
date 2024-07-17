@@ -1,25 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AddRecordModal } from "../../components/AddRecordModal";
+import axios from "axios";
 
 const FinancialRecords = () => {
-  const [records, setRecords] = useState([
-    {
-      id: 1,
-      type: "Income",
-      amount: 5000,
-      date: "2024-07-01",
-      category: "Salary",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      type: "Expense",
-      amount: 1000,
-      date: "2024-07-05",
-      category: "Rent",
-      status: "Pending",
-    },
-  ]);
+  const [records, setRecords] = useState([]);
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newRecord, setNewRecord] = useState({
@@ -30,52 +14,118 @@ const FinancialRecords = () => {
     status: "Pending",
   });
 
-  const [editingRecord, setEditingRecord] = useState(null);
+  const [editingRecord, setEditingRecord] = useState({});
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const [reportCriteria, setReportCriteria] = useState({
-    startDate: "",
-    endDate: "",
-    type: "All",
+    date: "",
+    // type: "All",
   });
 
-  const handleAddRecord = () => {
-    setRecords([...records, { ...newRecord, id: records.length + 1 }]);
-    setNewRecord({
-      type: "Income",
-      amount: "",
-      date: "",
-      category: "",
-      status: "Pending",
-    });
-    setShowAddForm(false);
+  const handleAddRecord = async (newRecord) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8001/api/v1/financials",
+        {
+          type: newRecord.type,
+          amount: Number.parseInt(newRecord.amount),
+          date: Number.parseInt(newRecord.date),
+          category: newRecord.category,
+          status: newRecord.status,
+        },
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+      setRecords([...records, response.data.data]);
+    } catch (err) {
+      console.log(err);
+    }
   };
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  // ... other state variables
-
-  // const handleAddRecord = (newRecord) => {
-  //   // Logic to add the new record
-  //   setRecords([...records, { ...newRecord, id: Date.now() }]);
-  // };
 
   const handleEditRecord = (id) => {
-    const recordToEdit = records.find((record) => record.id === id);
+    const recordToEdit = records.find((record) => record._id === id);
     setEditingRecord(recordToEdit);
+    setIsEditModalOpen(true);
   };
 
-  const handleUpdateRecord = () => {
-    setRecords(
-      records.map((record) =>
-        record.id === editingRecord.id ? editingRecord : record
-      )
-    );
-    setEditingRecord(null);
+  const handleGenerateReport = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8001/api/v1/reports/sales/?date=${reportCriteria.date}`,
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleGenerateReport = () => {
-    // Placeholder for report generation logic
-    console.log("Generating report with criteria:", reportCriteria);
+  const getFinancials = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8001/api/v1/financials",
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+      setRecords(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  const handleRecordUpdate = async (updatedItem) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8001/api/v1/financials/${editingRecord._id}`,
+        {
+          type: updatedItem.type,
+          amount: Number.parseInt(updatedItem.amount),
+          date: Number.parseInt(updatedItem.date),
+          category: updatedItem.category,
+          status: updatedItem.status,
+        },
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+      getFinancials();
+      // setItems([...items, response.data.data]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    try {
+      getFinancials();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
   return (
     <div className="w-full bg-[#121212] text-white p-4">
       <h2 className="text-2xl font-bold mb-4">Financial Records</h2>
@@ -93,6 +143,14 @@ const FinancialRecords = () => {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddRecord}
+      />
+
+      {/* Add Record Modal */}
+      <AddRecordModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSave={handleRecordUpdate}
+        record={editingRecord}
       />
 
       {/* Financial Records Table */}
@@ -118,7 +176,7 @@ const FinancialRecords = () => {
                 <td className="p-2 hidden sm:table-cell">{record.status}</td>
                 <td className="p-2">
                   <button
-                    onClick={() => handleEditRecord(record.id)}
+                    onClick={() => handleEditRecord(record._id)}
                     className="text-blue-500 hover:text-blue-400"
                   >
                     Edit
@@ -131,7 +189,7 @@ const FinancialRecords = () => {
       </div>
 
       {/* Edit Record Form */}
-      {editingRecord && (
+      {/* {editingRecord && (
         <div className="bg-black p-4 rounded-md mt-4">
           <h3 className="text-xl font-semibold mb-2">Edit Record</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -197,7 +255,7 @@ const FinancialRecords = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Generate Reports Section */}
       <div className="mt-8 bg-black p-4 rounded-md">
@@ -206,16 +264,16 @@ const FinancialRecords = () => {
           <input
             type="date"
             placeholder="Start Date"
-            value={reportCriteria.startDate}
+            value={reportCriteria.date}
             onChange={(e) =>
               setReportCriteria({
                 ...reportCriteria,
-                startDate: e.target.value,
+                date: e.target.value,
               })
             }
             className="bg-[#27272A] p-2 rounded w-full"
           />
-          <input
+          {/* <input
             type="date"
             placeholder="End Date"
             value={reportCriteria.endDate}
@@ -223,14 +281,14 @@ const FinancialRecords = () => {
               setReportCriteria({ ...reportCriteria, endDate: e.target.value })
             }
             className="bg-[#27272A] p-2 rounded w-full"
-          />
-          <select
+          /> */}
+          {/* <select
             value={reportCriteria.type}
             onChange={(e) =>
               setReportCriteria({ ...reportCriteria, type: e.target.value })
             }
             className="bg-[#27272A] p-2 rounded w-full"
-          />
+          /> */}
         </div>
         <button
           onClick={handleGenerateReport}
