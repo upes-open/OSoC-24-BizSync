@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -9,43 +9,19 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import axios from "axios";
 
 const Sales = () => {
-  const [salesOrders, setSalesOrders] = useState([
-    {
-      id: 1,
-      orderNumber: "SO-001",
-      date: "2024-07-01",
-      customerName: "John Doe",
-      totalAmount: 500,
-      status: "Completed",
-    },
-    {
-      id: 2,
-      orderNumber: "SO-002",
-      date: "2024-07-02",
-      customerName: "Jane Smith",
-      totalAmount: 750,
-      status: "Pending",
-    },
-    {
-      id: 3,
-      orderNumber: "SO-003",
-      date: "2024-07-03",
-      customerName: "Bob Johnson",
-      totalAmount: 1000,
-      status: "Processing",
-    },
-  ]);
+  const [salesOrders, setSalesOrders] = useState([]);
 
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [returnOrder, setReturnOrder] = useState({
-    orderNumber: "",
-    reason: "",
+    saleId: "",
+    productId: "",
   });
   const [reportCriteria, setReportCriteria] = useState({
-    startDate: "",
-    endDate: "",
+    date: "",
+    // endDate: "",
     type: "Sales Performance",
   });
 
@@ -75,11 +51,66 @@ const Sales = () => {
     setReturnOrder({ orderNumber: "", reason: "" });
   };
 
-  const handleGenerateReport = () => {
-    console.log("Generating report with criteria:", reportCriteria);
-    // Here you would typically generate the report based on the criteria
+  const handleGenerateReport = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8001/api/v1/reports/sales/?date=${reportCriteria.date}`,
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  const getSales = async () => {
+    try {
+      const response = await axios.get("http://localhost:8001/api/v1/sales", {
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+        },
+      });
+
+      console.log(response.data.data);
+      setSalesOrders(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const processReturns = async (saleId, productId) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8001/api/v1/returns",
+        {
+          orderId: returnOrder.saleId,
+          items: [returnOrder.productId],
+        },
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+      setReturnOrder({ saleId: "", productId: "" });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getSales();
+  }, []);
   return (
     <div className="w-full bg-[#121212] text-white p-4">
       <h2 className="text-2xl font-bold mb-6">Sales Management</h2>
@@ -98,24 +129,29 @@ const Sales = () => {
                 <th className="p-2 text-left">Status</th>
               </tr>
             </thead>
-            <tbody>
-              {salesOrders.map((order) => (
-                <tr key={order.id} className="border-b border-[#27272A]">
-                  <td className="p-2">{order.orderNumber}</td>
-                  <td className="p-2">{order.date}</td>
-                  <td className="p-2">
-                    <button
-                      onClick={() => handleCustomerSelect(order.customerName)}
-                      className="text-blue-500 hover:underline"
-                    >
-                      {order.customerName}
-                    </button>
-                  </td>
-                  <td className="p-2">${order.totalAmount}</td>
-                  <td className="p-2">{order.status}</td>
-                </tr>
-              ))}
-            </tbody>
+
+            {salesOrders.length === 0 ? (
+              <div className="w-full p-10">No Sales</div>
+            ) : (
+              <tbody>
+                {salesOrders.map((order) => (
+                  <tr key={order.id} className="border-b border-[#27272A]">
+                    <td className="p-2">{order.orderNumber}</td>
+                    <td className="p-2">{order.date}</td>
+                    <td className="p-2">
+                      <button
+                        onClick={() => handleCustomerSelect(order.customerName)}
+                        className="text-blue-500 hover:underline"
+                      >
+                        {order.customerName}
+                      </button>
+                    </td>
+                    <td className="p-2">${order.totalAmount}</td>
+                    <td className="p-2">{order.status}</td>
+                  </tr>
+                ))}
+              </tbody>
+            )}
           </table>
         </div>
       </div>
@@ -149,25 +185,25 @@ const Sales = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <input
             type="text"
-            placeholder="Order Number"
-            value={returnOrder.orderNumber}
+            placeholder="Sale ID"
+            value={returnOrder.saleId}
             onChange={(e) =>
-              setReturnOrder({ ...returnOrder, orderNumber: e.target.value })
+              setReturnOrder({ ...returnOrder, saleId: e.target.value })
             }
             className="bg-black border border-[#27272A] p-2 rounded w-full"
           />
           <input
             type="text"
-            placeholder="Reason for Return"
-            value={returnOrder.reason}
+            placeholder="Product ID"
+            value={returnOrder.productId}
             onChange={(e) =>
-              setReturnOrder({ ...returnOrder, reason: e.target.value })
+              setReturnOrder({ ...returnOrder, productId: e.target.value })
             }
             className="bg-black border border-[#27272A] p-2 rounded w-full"
           />
         </div>
         <button
-          onClick={handleReturnSubmit}
+          onClick={processReturns}
           className="bg-white text-black px-4 py-2 rounded w-full sm:w-auto"
         >
           Process Return
@@ -180,17 +216,17 @@ const Sales = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <input
             type="date"
-            placeholder="Start Date"
-            value={reportCriteria.startDate}
+            placeholder="Date"
+            value={reportCriteria.date}
             onChange={(e) =>
               setReportCriteria({
                 ...reportCriteria,
-                startDate: e.target.value,
+                date: e.target.value,
               })
             }
             className="bg-black border border-[#27272A] p-2 rounded w-full"
           />
-          <input
+          {/* <input
             type="date"
             placeholder="End Date"
             value={reportCriteria.endDate}
@@ -198,7 +234,7 @@ const Sales = () => {
               setReportCriteria({ ...reportCriteria, endDate: e.target.value })
             }
             className="bg-black border border-[#27272A] p-2 rounded w-full"
-          />
+          /> */}
           <select
             value={reportCriteria.type}
             onChange={(e) =>
