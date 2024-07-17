@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 const dashboardItems = [
   { name: "Home", path: "home" },
@@ -32,17 +32,19 @@ const DashboardLayout = () => {
         <p className="font-bold p-4">BizSync</p>
         <ul className="ml-4 space-y-1 mt-16">
           {dashboardItems.map((item) => (
-            <li
-              key={item.name}
-              className={`rounded-l-lg p-3 cursor-pointer transition-colors duration-200 ${
-                activeItem === item.name
-                  ? "bg-white text-black"
-                  : "bg-transparent text-white hover:bg-white hover:text-black"
-              }`}
-              onClick={() => setActiveItem(item.name)}
-            >
-              {item.name}
-            </li>
+            <Link to={item.path}>
+              <li
+                key={item.name}
+                className={`rounded-l-lg p-3 cursor-pointer transition-colors duration-200 ${
+                  activeItem === item.name
+                    ? "bg-white text-black"
+                    : "bg-transparent text-white hover:bg-white hover:text-black"
+                }`}
+                onClick={() => setActiveItem(item.name)}
+              >
+                {item.name}
+              </li>
+            </Link>
           ))}
         </ul>
       </div>
