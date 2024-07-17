@@ -152,9 +152,6 @@ const Staff = () => {
                   <td className="py-2 pr-6">
                     <div className="">
                       {staff.roles.map((role) => `${role} `)}
-                      {/* <button className="text-blue-500 hover:text-blue-400 text-sm">
-                        Manage Roles
-                      </button> */}
                     </div>
                   </td>
                   <td className="py-2 whitespace-nowrap">

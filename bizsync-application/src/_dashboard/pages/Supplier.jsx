@@ -1,35 +1,113 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { AddSupplierModal } from "../../components/AddSupplierModal";
+import axios from "axios";
 
 const Supplier = () => {
   // Sample data for the supplier details
-  const supplierData = [
-    {
-      name: "ABC Corporation",
-      email: "contact@abccorp.com",
-      phone: "+1 (555) 123-4567",
-      status: "Active",
-    },
-    {
-      name: "XYZ Suppliers",
-      email: "info@xyzsuppliers.com",
-      phone: "+1 (555) 987-6543",
-      status: "Inactive",
-    },
-    {
-      name: "Global Distributors",
-      email: "sales@globaldist.com",
-      phone: "+1 (555) 246-8135",
-      status: "Active",
-    },
-  ];
+  const [selectedSupplier, setSelectedSupplier] = useState();
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [supplierData, setSupplierData] = useState([]);
+
+  const handleEditSupplier = async (supplier) => {
+    setSelectedSupplier(supplier);
+    console.log(selectedSupplier);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateSupplier = async (updatedSupplier) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8001/api/v1/suppliers/${selectedSupplier._id}`,
+        {
+          name: updatedSupplier.name,
+          contactInfo: updatedSupplier.contactInfo,
+          status: updatedSupplier.status,
+        },
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+      getSupplier();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAddSupplier = async (supplier) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8001/api/v1/suppliers",
+        {
+          name: supplier.name,
+          contactInfo: supplier.contactInfo,
+          status: supplier.status,
+        },
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+      setSupplierData([...supplierData, response.data.data]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getSupplier = async (supplier) => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8001/api/v1/suppliers",
+        {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjkyZWY3MzJhOThmZTliZTAyODM2ZGQiLCJlbWFpbCI6InByaXlhbnNodWJ1dG9sYUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InByaXlhbnNodSIsIm9yZ2FuaXphdGlvbiI6InVwZXMiLCJpYXQiOjE3MjA5MDU2MzQsImV4cCI6MTAwMDAwMTcyMDkwNTYzNH0.ujV1UyQdSTRnK98H0a57Io_PaFrNbS3jDMzWF1bBlxE",
+          },
+        }
+      );
+
+      console.log(response.data.data);
+      setSupplierData(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getSupplier();
+  }, []);
 
   return (
     <div className="md:w-full w-screen bg-[#121212] text-white p-4">
       <div className="bg-none p-4 flex justify-end items-center gap-4">
-        <button className="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition-colors duration-200">
-          Add new supplier
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition-colors duration-200"
+        >
+          Add supplier
         </button>
       </div>
+      <AddSupplierModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleAddSupplier}
+      />
+
+      <AddSupplierModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSave={handleUpdateSupplier}
+        company={selectedSupplier}
+      />
       <div className="bg-black rounded-md border border-[#27272A] p-4">
         <h3 className="text-xl font-semibold mb-2">Supplier Details</h3>
         <p className="text-gray-400 mb-4">
@@ -56,10 +134,10 @@ const Supplier = () => {
                     {supplier.name}
                   </td>
                   <td className="py-2 pr-6 whitespace-nowrap">
-                    {supplier.email}
+                    {supplier.contactInfo.email}
                   </td>
                   <td className="py-2 pr-6 whitespace-nowrap">
-                    {supplier.phone}
+                    {supplier.contactInfo.phone}
                   </td>
                   <td
                     className={`py-2 pr-6 whitespace-nowrap ${
@@ -71,7 +149,10 @@ const Supplier = () => {
                     {supplier.status}
                   </td>
                   <td className="py-2 whitespace-nowrap">
-                    <button className="text-blue-500 hover:text-blue-400">
+                    <button
+                      onClick={() => handleEditSupplier(supplier)}
+                      className="text-blue-500 hover:text-blue-400"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"

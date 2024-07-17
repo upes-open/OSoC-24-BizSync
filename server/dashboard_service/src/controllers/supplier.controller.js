@@ -8,14 +8,14 @@ const getSuppliers = asyncHandler(async (req, res) => {
   const suppliers = await Supplier.find({ user: userId });
   return res
     .status(200)
-    .json(new ApiResponse(200, { suppliers }, "Fetched Successfully"));
+    .json(new ApiResponse(200, suppliers, "Fetched Successfully"));
 });
 
 const addSupplier = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const { name, contactInfo } = req.body;
+  const { name, contactInfo, status } = req.body;
 
-  if (!contactInfo.email || !contactInfo.phone || !name)
+  if (!contactInfo.email || !contactInfo.phone || !name || !status)
     throw new ApiError(400, "All fields are required");
 
   const existingSupplier = await Supplier.findOne({
@@ -27,6 +27,7 @@ const addSupplier = asyncHandler(async (req, res) => {
   const supplier = await Supplier.create({
     name,
     contactInfo,
+    status,
     user: userId,
   });
 
@@ -36,9 +37,7 @@ const addSupplier = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(
-      new ApiResponse(200, { savedSupplier }, "Supplier created successfully")
-    );
+    .json(new ApiResponse(200, savedSupplier, "Supplier created successfully"));
 });
 
 const updateSupplier = asyncHandler(async (req, res) => {
@@ -46,6 +45,7 @@ const updateSupplier = asyncHandler(async (req, res) => {
 
   const supplierId = req.params.id;
   const { name, contactInfo, status } = req.body;
+  console.log(req.body);
 
   const supplier = await Supplier.findOne({ _id: supplierId, user: userId });
 
@@ -66,7 +66,7 @@ const updateSupplier = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, { savedSupplier }, "Update Success"));
+    .json(new ApiResponse(200, savedSupplier, "Update Success"));
 });
 
 export { getSuppliers, updateSupplier, addSupplier };
