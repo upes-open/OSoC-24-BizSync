@@ -5,7 +5,6 @@ import { Inventory } from "../models/inventory.model.js";
 
 //Retrieve list of inventory items
 const inventoryList = asyncHandler(async (req, res) => {
-  console.log("hello");
   const items = await Inventory.find();
   res
     .status(200)
@@ -52,6 +51,7 @@ const updateInventory = asyncHandler(async (req, res) => {
   item.status = status || item.status;
 
   const updatedItem = await item.save();
+  console.log(updatedItem);
 
   res
     .status(200)
@@ -66,6 +66,7 @@ const stockCheck = asyncHandler(async (req, res) => {
   const lowStockItems = await Inventory.find({
     quantity: { $lt: lowStockThreshold },
   });
+  console.log(lowStockItems);
   res
     .status(200)
     .json(
