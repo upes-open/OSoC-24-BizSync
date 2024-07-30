@@ -22,11 +22,13 @@ import staffRoute from "./routes/staff.routes.js";
 import reportRoute from "./routes/reports.routes.js";
 import orderRoute from "./routes/orders.routes.js";
 import inventoryRoute from "./routes/inventory.routes.js";
+import salesRoute from "./routes/sales.routes.js";
 
 app.use("/api/v1", supplierRoute);
 app.use("/api/v1", staffRoute);
 app.use("/api/v1", reportRoute);
 app.use("/api/v1", orderRoute);
 app.use("/api/v1", inventoryRoute);
+app.use("/api/v1", salesRoute);
 
 export { app };
